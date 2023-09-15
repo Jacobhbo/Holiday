@@ -4,11 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>a4cf2951-17c0-4900-8642-dc0e9f56ad7b</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Nager.Date" Version="1.45.0" />
-  </ItemGroup>
 
 </Project>

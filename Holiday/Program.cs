@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure the HTTP request pipeline here.
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddSingleton<HolidayService>(); // Tilføj HolidayService som en singleton service.
 
