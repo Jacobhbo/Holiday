@@ -8,6 +8,12 @@
 
 <!-- Din Razor-kode her -->
 
+
+
+<button @onclick="ExecuteSqlQuery">Kør SQL Query</button>
+
+
+
 <button @onclick="GetHolidays">Hent mærkedage</button>
 
 @if (holidays != null)
@@ -31,45 +37,4 @@
     </table>
 }
 
-@code {
-    private List<HolidayService.HolidayInfo> holidays;
 
-    private async Task GetHolidays()
-    {
-        // Hent ferieoplysninger for Danmark i 2023
-        holidays = await holidayService.GetHolidaysForCountryAsync("DK", 2023);
-    }
-
-    // Opret en ordbog til oversættelse af helligdagsnavne
-   private Dictionary<string, string> holidayTranslations = new Dictionary<string, string>
-    {
-        { "New Year's Day", "Nytårsdag" },
-        { "Christmas Day", "Juledag" },
-        { "Maundy Thursday", "Skærtorsdag"},
-        { "Good Friday", "Langfredag"},
-        { "Easter Sunday", "Påske & Påskedag"},
-        { "Easter Monday", "2. Påskedag"},
-        { "General Prayer Day", "Stor Bededag"},
-        { "Ascension Day", "Kristi Himmelfart"},
-        { "Bank closing day", "Bankdag"},
-        { "Pentecost", "Pinse & Pinsedag"},
-        { "Whit Monday", "2. Pinsedag"},
-        { "Constitution Day", "Grundlovsdag & Fars dag"},
-        { "Christmas Eve", "Juleaften"},
-        { "St. Stephen's Day", "2. Juledag"},
-        { "New Year's Eve", "Nytårsaften"}
-      
-    };
-
-
-    private string GetDanishHolidayName(string englishName)
-    {
-        if (holidayTranslations.TryGetValue(englishName, out var danishName))
-        {
-            return danishName;
-        }
-
-
-        return englishName;
-    }
-}
