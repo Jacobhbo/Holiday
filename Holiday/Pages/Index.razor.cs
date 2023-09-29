@@ -29,7 +29,23 @@ namespace Holiday.Pages
         }
 
         // Opret en ordbog til oversættelse af helligdagsnavne
-        private Dictionary<string, string> holidayTranslations = new Dictionary<string, string> { { "New Year's Day", "Nytårsdag" }, { "Christmas Day", "Juledag" }, { "Maundy Thursday", "Skærtorsdag" }, { "Good Friday", "Langfredag" }, { "Easter Sunday", "Påske & Påskedag" }, { "Easter Monday", "2. Påskedag" }, { "General Prayer Day", "Stor Bededag" }, { "Ascension Day", "Kristi Himmelfart" }, { "Bank closing day", "Bankdag" }, { "Pentecost", "Pinse & Pinsedag" }, { "Whit Monday", "2. Pinsedag" }, { "Constitution Day", "Grundlovsdag & Fars dag" }, { "Christmas Eve", "Juleaften" }, { "St. Stephen's Day", "2. Juledag" }, { "New Year's Eve", "Nytårsaften" } };
+        private Dictionary<string, string> holidayTranslations = new Dictionary<string, string> {
+            { "New Year's Day", "Nytårsdag" },
+            { "Christmas Day", "Juledag" },
+            { "Maundy Thursday", "Skærtorsdag" },
+            { "Good Friday", "Langfredag" },
+            { "Easter Sunday", "Påske & Påskedag" },
+            { "Easter Monday", "2. Påskedag" },
+            { "General Prayer Day", "Stor Bededag" },
+            { "Ascension Day", "Kristi Himmelfart" },
+            { "Bank closing day", "Bankdag" },
+            { "Pentecost", "Pinse & Pinsedag" },
+            { "Whit Monday", "2. Pinsedag" },
+            { "Constitution Day", "Grundlovsdag & Fars dag" },
+            { "Christmas Eve", "Juleaften" },
+            { "St. Stephen's Day", "2. Juledag" },
+            { "New Year's Eve", "Nytårsaften" } };
+
         private string GetDanishHolidayName(string englishName)
         {
             if (holidayTranslations.TryGetValue(englishName, out var danishName))
@@ -40,36 +56,88 @@ namespace Holiday.Pages
             return englishName;
         }
 
+
+        private List<Person> people { get; set; } = new List<Person>();
+        private bool queryExecuted = false;
+        private bool holidaysLoaded = false;
+        
+
         public async Task ExecuteSqlQuery()
         {
-            try
+            if (!queryExecuted)
             {
-                string connectionString = "Data Source=192.168.23.210,1433;Database=BirthdayDatabase;User=Egon;Password=Passw0rd;";
-                
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                try
                 {
-                    connection.Open();
-                    string sqlQuery = "SELECT * FROM BirthdayDatabase";
+                    string connectionString = "Data Source=192.168.23.210,1433;Database=BirthdayDatabase;User=Egon;Password=Passw0rd;Encrypt=FALSE";
 
-                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+
+                    using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        await connection.OpenAsync();
+                        string sqlQuery = "SELECT * FROM Birthday";
+
+                        using (SqlCommand command = new SqlCommand(sqlQuery, connection))
                         {
-                            while (await reader.ReadAsync())
+                            using (SqlDataReader reader = await command.ExecuteReaderAsync())
                             {
-                                string columnName = reader["ColumnName"].ToString();
+                                while (await reader.ReadAsync())
+                                {
+                                    var person = new Person
+                                    {
+                                        Navn = reader["navn"].ToString(),
+                                        Alder = Convert.ToInt32(reader["alder"]),
+                                        Fødselsdato = Convert.ToDateTime(reader["birthdaydato"]),
+                                        Køn = reader["køn"].ToString()
+                                    };
+                                    people.Add(person);
+                                    foreach (var person1 in people)
+                                    {
+                                        Console.WriteLine(person.Navn);
+                                    }
+                                }
                             }
                         }
                     }
+
+                    queryExecuted = true;
+                    StateHasChanged();
+
                 }
-
+                catch (Exception ex)
+                {
+                    Console.WriteLine("FEJL: " + ex.Message);
+                }
             }
-            catch (Exception ex)
+        }
+
+        public async Task GetHolidaysFromDatabase()
+        {
+            if (!holidaysLoaded)
             {
-                Console.WriteLine("FEJL: " + ex.Message);
-            }
+                try
+                {
+                    // Hent ferieoplysninger her...
+                    holidays = await holidayService.GetHolidaysForCountryAsync("DK", 2023);
 
+
+                    holidaysLoaded = true;
+                    StateHasChanged();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("FEJL i GetHolidaysFromDatabase " + ex.Message);
+                }
+            }
+        }
+
+
+
+        public class Person
+        {
+            public string Navn { get; set; }
+            public int Alder { get; set; }
+            public DateTime Fødselsdato { get; set; }
+            public string Køn { get; set; }
         }
 
     }

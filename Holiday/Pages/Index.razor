@@ -10,11 +10,33 @@
 
 
 
-<button @onclick="ExecuteSqlQuery">Kør SQL Query</button>
+
+<button @onclick="ExecuteSqlQuery" disabled="@queryExecuted" style="margin-bottom: 20px">Kør SQL Query</button>
 
 
 
-<button @onclick="GetHolidays">Hent mærkedage</button>
+@if (queryExecuted)
+{
+    <p>SQL Query er blevet kørt.</p>
+}
+<table>
+    <thead>
+    </thead>
+    <tbody>
+        @foreach (var person in people)
+        {
+            <tr>
+                <td>@($"{person.Navn} er {person.Alder} år, født {person.Fødselsdato.ToString("d MMMM yyyy", new CultureInfo("da-DK"))} og er en {person.Køn}")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+<button @onclick="GetHolidaysFromDatabase" disabled="@holidaysLoaded">Hent mærkedage</button>
+
 
 @if (holidays != null)
 {
@@ -38,3 +60,26 @@
 }
 
 
+<div class="page-container">
+    <div class="content">
+        <style>
+            /* styles.css */
+            .page-container {
+
+            }
+
+
+            .image-container {
+                float: right;
+                margin-left: 770px;
+                position: fixed;
+                top: 0;
+                left: 0;
+            }
+
+        </style>
+    </div>
+    <div class="image-container">
+        <img src="life.jfif" alt="Life">
+    </div>
+</div>

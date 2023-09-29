@@ -21,9 +21,11 @@ CREATE TABLE Birthday
 );
 
 
-INSERT INTO Birthday
-VALUES ('Egon Olsen', '18', '07-03-2005', 'Mand');
-INSERT INTO Birthday
-VALUES ('Jean Paul', '27', '12-11-1999', 'Mand');
+INSERT INTO Birthday (navn, alder, birthdaydato, køn)
+VALUES ('Egon Olsen', '18', '2005-03-07', 'Mand');
+
+INSERT INTO Birthday (navn, alder, birthdaydato, køn)
+VALUES ('Jean Paul', '27', '1995-11-12', 'Mand');
+
 
 SELECT * FROM Birthday
