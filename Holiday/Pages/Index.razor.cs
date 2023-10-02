@@ -60,7 +60,20 @@ namespace Holiday.Pages
         private List<Person> people { get; set; } = new List<Person>();
         private bool queryExecuted = false;
         private bool holidaysLoaded = false;
-        
+        private Person newPerson = new Person();
+
+        public async Task AddUser()
+        {
+            // Add the new user to the list (not to the database yet)
+            people.Add(newPerson);
+
+            // Clear the input fields
+            newPerson = new Person();
+
+            // Notify Blazor to re-render the component
+            StateHasChanged();
+        }
+
 
         public async Task ExecuteSqlQuery()
         {

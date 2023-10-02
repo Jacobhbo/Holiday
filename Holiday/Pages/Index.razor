@@ -10,6 +10,32 @@
 
 
 
+<div class="left-align">
+    <label for="navn">Navn:</label>
+    <input type="text" id="navn" @bind="newPerson.Navn" />
+
+    <label for="alder">Alder:</label>
+    <input type="number" id="alder" @bind="newPerson.Alder" />
+
+    <label for="birthdaydato">Fødselsdato:</label>
+    <input type="date" id="birthdaydato" @bind="newPerson.Fødselsdato" />
+
+    <label for="køn">Køn:</label>
+    <input type="text" id="køn" @bind="newPerson.Køn" />
+
+    <button @onclick="AddUser">Tilføj Bruger</button>
+</div>
+
+<style>
+    .left-align {
+        text-align: left;
+        margin-left: 50px; /* Optional: Add some left margin to space it from the container edge */
+        margin-top: 10px;
+        padding: 20px;
+    }
+</style>
+
+
 
 <button @onclick="ExecuteSqlQuery" disabled="@queryExecuted" style="margin-bottom: 20px">Kør SQL Query</button>
 
@@ -71,7 +97,8 @@
 
             .image-container {
                 float: right;
-                margin-left: 770px;
+                margin-left: 900px;
+                margin-top: 150px;
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -83,3 +110,4 @@
         <img src="life.jfif" alt="Life">
     </div>
 </div>
+
